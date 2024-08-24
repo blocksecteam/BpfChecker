@@ -1,0 +1,55 @@
+diff --git a/src/asm_unmarshal.cpp b/src/asm_unmarshal.cpp
+index 3fcca00..a31d15e 100644
+--- a/src/asm_unmarshal.cpp
++++ b/src/asm_unmarshal.cpp
+@@ -259,9 +259,9 @@ struct Unmarshaller {
+             return LoadMapFd{.dst = Reg{inst.dst}, .mapfd = inst.imm};
+         }
+ 
+-        ebpf_inst next = insts[pc + 1];
+-        if (next.opcode != 0 || next.dst != 0 || next.src != 0 || next.offset != 0)
+-            note("invalid LDDW");
++//        ebpf_inst next = insts[pc + 1];
++//        if (next.opcode != 0 || next.dst != 0 || next.src != 0 || next.offset != 0)
++//            note("invalid LDDW");
+         return Bin{
+             .op = Bin::Op::MOV,
+             .dst = Reg{inst.dst},
+diff --git a/src/crab/bitset_domain.hpp b/src/crab/bitset_domain.hpp
+index 9e62445..f1c5d8a 100644
+--- a/src/crab/bitset_domain.hpp
++++ b/src/crab/bitset_domain.hpp
+@@ -63,6 +63,9 @@ class bitset_domain_t final {
+         bool only_num = true;
+         bool only_non_num = true;
+         for (int j = 0; j < width; j++) {
++            if ( lb+j >= EBPF_STACK_SIZE){
++                throw std::invalid_argument("");
++            }
+             bool b = non_numerical_bytes[lb + j];
+             only_num &= !b;
+             only_non_num &= b;
+diff --git a/src/crab_utils/debug.hpp b/src/crab_utils/debug.hpp
+index a3af2e4..7f42d2d 100644
+--- a/src/crab_utils/debug.hpp
++++ b/src/crab_utils/debug.hpp
+@@ -11,7 +11,6 @@
+ #include <set>
+ #include <stdarg.h>
+ #include <string>
+-
+ namespace crab {
+ 
+ #define CRAB_LOG(TAG, CODE)                                      \
+@@ -45,10 +44,7 @@ inline void ___print___(ArgTypes... args) {
+ 
+ #define CRAB_ERROR(...)              \
+     do {                             \
+-        std::cerr << "CRAB ERROR: "; \
+-        ___print___(__VA_ARGS__);    \
+-        std::cerr << "\n";           \
+-        std::exit(EXIT_FAILURE);     \
++        throw std::invalid_argument("");    \
+     } while (0)
+ 
+ extern bool CrabWarningFlag;

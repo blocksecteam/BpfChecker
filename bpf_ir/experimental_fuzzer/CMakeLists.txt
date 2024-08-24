@@ -1,0 +1,12 @@
+add_executable(fuzzer fuzzer.c fuzzer.h fuzzerConfig.h)
+target_include_directories(fuzzer PRIVATE ir)
+target_include_directories(fuzzer PRIVATE /path/to/lkl/tools/lkl/include)
+target_link_libraries(fuzzer ir rt)
+target_link_libraries(fuzzer /path/to/lkl/lib/liblkl.so)
+
+add_executable(combineFuzzer combineFuzzer.c fuzzer.h fuzzerConfig.h)
+target_include_directories(combineFuzzer PRIVATE ir)
+target_include_directories(combineFuzzer PRIVATE /path/to/lkl/tools/lkl/include)
+target_link_libraries(combineFuzzer ir rt)
+target_link_libraries(combineFuzzer /path/to/lkl/tools/lkl/lib/liblkl.so)
+target_link_libraries(combineFuzzer /path/to/ebpf-verifier/build/libdataVerifier.so)

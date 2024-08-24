@@ -1,0 +1,3 @@
+[submodule "src/rbpf"]
+	path = src/rbpf
+	url = https://github.com/solana-labs/rbpf.git

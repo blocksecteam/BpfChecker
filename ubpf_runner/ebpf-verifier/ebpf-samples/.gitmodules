@@ -1,0 +1,3 @@
+[submodule "bpf_cilium_test"]
+	path = bpf_cilium_test
+	url = https://github.com/4ast/bpf_cilium_test.git

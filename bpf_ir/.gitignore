@@ -1,0 +1,6 @@
+.idea
+cmake-*
+
+build/
+mutation_build/
+output

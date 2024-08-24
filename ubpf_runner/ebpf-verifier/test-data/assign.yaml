@@ -1,0 +1,199 @@
+# Copyright (c) Prevail Verifier contributors.
+# SPDX-License-Identifier: MIT
+---
+test-case: assign immediate
+
+pre: []
+
+code:
+  <start>: |
+    w1 = 0
+
+post:
+  - r1.type=number
+  - r1.value=0
+---
+test-case: assign register
+
+pre: []
+
+code:
+  <start>: |
+    r1 = r2;
+
+post:
+  - r1.type=r2.type
+  - r1.value=r2.value
+
+---
+test-case: re-assign immediate
+
+pre: ["r1.value=5", "r1.type=number"]
+
+code:
+  <start>: |
+    r1 = 0
+
+post:
+  - r1.type=number
+  - r1.value=0
+---
+test-case: re-assign register
+
+pre: ["r1.value=[-3, 5]", "r1.type=number"]
+
+code:
+  <start>: |
+    r1 = 0
+
+post:
+  - r1.type=number
+  - r1.value=0
+---
+test-case: stack assign immediate
+
+pre: ["r10.type=stack", "r10.stack_offset=512"]
+
+code:
+  <start>: |
+    *(u64 *)(r10 - 8) = 0
+
+post:
+  - r10.type=stack
+  - r10.stack_offset=512
+  - s[504...511].type=number
+  - s[504...511].value=0
+---
+test-case: stack assign number register
+
+pre: ["r10.type=stack", "r10.stack_offset=512", "r1.type=number", "r1.value=0"]
+
+code:
+  <start>: |
+    *(u64 *)(r10 - 8) = r1
+
+post:
+  - r1.type=number
+  - r1.value=0
+  - r10.type=stack
+  - r10.stack_offset=512
+  - s[504...511].type=number
+  - s[504...511].value=0
+---
+test-case: stack assign packet register
+
+pre: ["r10.type=stack", "r10.stack_offset=512", "r1.type=packet", "r1.packet_offset=0"]
+
+code:
+  <start>: |
+    *(u64 *)(r10 - 8) = r1
+
+post:
+  - r1.type=packet
+  - r1.packet_offset=0
+  - r1.value=s[504...511].value
+  - r10.type=stack
+  - r10.stack_offset=512
+  - s[504...511].type=packet
+  - s[504...511].packet_offset=0
+---
+test-case: stack extend numeric range
+
+pre: ["r10.type=stack", "r10.stack_offset=512", "s[500...507].type=number"]
+
+code:
+  <start>: |
+    *(u64 *)(r10 - 8) = 0
+
+post:
+  - r10.type=stack
+  - r10.stack_offset=512
+  - s[500...511].type=number
+  - s[504...511].value=0
+---
+test-case: stack narrow numeric range
+
+pre: ["r10.type=stack", "r10.stack_offset=512", "r1.type=packet", "r1.packet_offset=0", "s[500...507].type=number"]
+
+code:
+  <start>: |
+    *(u64 *)(r10 - 8) = r1
+
+post:
+  - r1.type=packet
+  - r1.packet_offset=0
+  - r1.value=s[504...511].value
+  - r10.type=stack
+  - r10.stack_offset=512
+  - s[500...503].type=number
+  - s[504...511].type=packet
+  - s[504...511].packet_offset=0
+---
+test-case: assign register number value
+
+pre: ["r1.value=0", "r1.type=number"]
+
+code:
+  <start>: |
+    r2 = r1
+
+post:
+  - r1.type=number
+  - r1.value=0
+  - r2.type=number
+  - r2.value=0
+---
+test-case: assign register stack value
+
+pre: ["r1.type=stack", "r1.stack_offset=0"]
+
+code:
+  <start>: |
+    r2 = r1
+
+post:
+  - r1.type=stack
+  - r1.stack_offset=0
+  - r2.type=stack
+  - r2.stack_offset=0
+  - r1.value=r2.value
+  - r1.stack_numeric_size=r2.stack_numeric_size
+---
+test-case: assign register shared value
+
+pre: ["r1.type=shared", "r1.shared_offset=0", "r1.shared_region_size=16"]
+
+code:
+  <start>: |
+    r2 = r1
+
+post:
+  - r1.type=shared
+  - r1.shared_offset=0
+  - r1.shared_region_size=16
+  - r2.type=shared
+  - r2.shared_offset=0
+  - r2.shared_region_size=16
+  - r1.value=r2.value
+---
+test-case: assign register combination value
+
+pre: ["r1.type=[-1,0]", "r1.shared_offset=0", "r1.shared_region_size=16", "r1.stack_offset=500", "r1.stack_numeric_size=16"]
+
+code:
+  <start>: |
+    r2 = r1
+
+post:
+  - r1.type in {stack, shared}
+  - r1.shared_offset=0
+  - r1.shared_region_size=16
+  - r1.stack_offset=500
+  - r1.stack_numeric_size=16
+  - r2.type in {stack, shared}
+  - r2.shared_offset=0
+  - r2.shared_region_size=16
+  - r2.stack_offset=500
+  - r2.stack_numeric_size=16
+  - r1.type=r2.type
+  - r1.value=r2.value

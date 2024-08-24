@@ -1,0 +1,10 @@
+cmake-build-debug*
+.idea
+check
+.DS_Store
+findings/*
+build
+build_*
+!findings/make_poc.py
+!findings/skeletons
+!findings/ubpf_oob
