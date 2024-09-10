@@ -4,7 +4,7 @@
 #include "Template.h"
 #include "Lifter.h"
 
-#include "../fuzzer/fuzzerConfig.h"
+#include "fuzzerConfig.h"
 #include <iostream>
 #include <fstream>
 

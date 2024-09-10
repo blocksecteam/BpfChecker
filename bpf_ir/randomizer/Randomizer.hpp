@@ -156,6 +156,7 @@ public:
         actions_ = actions;
     }
 
+
     T getRandomizedChoice() {
         auto randomIdx = random_engine_->randomChoice();
         assert(0 <= randomIdx && randomIdx < actions_.size());

@@ -6,6 +6,7 @@
 #include <vector>
 #include <sstream>
 #include <iostream>
+#include <algorithm>
 
 using namespace std;
 
@@ -103,6 +104,7 @@ TestCase UBPFGenerator::generateProgram(size_t action_size) {
     // Hence we are free to write to the register in the initial program stage
     fixer.fixUninitializedRegister(this);
     
+    #ifdef ENABLE_ADVANCED_FIXER
     std::vector<std::function<void()>> fixerFunctions = {
         // NOTE: some fixer rules are aggresive, remove it if necessary
         [&]() { fixer.fixUninitializedMemory(this); },
@@ -125,6 +127,7 @@ TestCase UBPFGenerator::generateProgram(size_t action_size) {
     for (int i = 0; i < numFunctionsToCall; ++i) {
         fixerFunctions[i]();
     }
+    #endif
     
     module->addBasicBlocks(bbs);
     BytecodeData bytecode = module->CodeGen();

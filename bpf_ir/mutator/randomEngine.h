@@ -6,6 +6,7 @@
 #include <chrono>
 #include <ctime>
 #include <random>
+#include "config.h"
 
 std::random_device generic_rd;
 std::mt19937 generator(generic_rd());

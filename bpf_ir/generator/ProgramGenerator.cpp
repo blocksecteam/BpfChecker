@@ -71,229 +71,228 @@ GeneratorAction getRandomKernelGeneratorAction() {
    return selectedType;
 }
 
-TestCase generateExtremeCallProgram(size_t action_size) {
-   auto *module = new Module(defaultReservedRegisters, 3, false);
-   vector<BasicBlockPtr> bbs;
-   bbs.push_back(createBasicBlock());
-   bbs.push_back(createBasicBlock());
-   bbs[0]->setExitTerminator();
-   bbs[1]->setExitTerminator();
-   size_t block_index = 0;
-//    bbs[1]->add(std::make_unique<MovInst>(Register::REG_1, 1, BitWidth::bit64));
-   bbs[1]->add(std::make_unique<LoadImm64Inst>(Register::REG_1, 0));
-   while (action_size--) {
-       assert(block_index >= 0 && block_index < bbs.size());
-       auto block_cursor = bbs.at(block_index).get();
-       block_cursor->add(createRandomCallInstruction());
-//        block_cursor->add(std::make_unique<CallInst>(Register::REG_1));
-   }
-   module->addBasicBlocks(bbs);
-   BytecodeData bytecode = module->CodeGen();
-   std::stringstream stream;
-   stream << *module;
-   return {bytecode, stream.str()};
-}
+// TestCase generateExtremeCallProgram(size_t action_size) {
+//    auto *module = new Module(defaultReservedRegisters, 3, false);
+//    vector<BasicBlockPtr> bbs;
+//    bbs.push_back(createBasicBlock());
+//    bbs.push_back(createBasicBlock());
+//    bbs[0]->setExitTerminator();
+//    bbs[1]->setExitTerminator();
+//    size_t block_index = 0;
+// //    bbs[1]->add(std::make_unique<MovInst>(Register::REG_1, 1, BitWidth::bit64));
+//    bbs[1]->add(std::make_unique<LoadImm64Inst>(Register::REG_1, 0));
+//    while (action_size--) {
+//        assert(block_index >= 0 && block_index < bbs.size());
+//        auto block_cursor = bbs.at(block_index).get();
+// //        block_cursor->add(std::make_unique<CallInst>(Register::REG_1));
+//    }
+//    module->addBasicBlocks(bbs);
+//    BytecodeData bytecode = module->CodeGen();
+//    std::stringstream stream;
+//    stream << *module;
+//    return {bytecode, stream.str()};
+// }
 
 
-TestCase generateProgram(size_t action_size, GeneratorType generator_type) {
-   if (generator_type == ALU_ORIENTED) {
-       auto *module = new Module(defaultReservedRegisters, 3, false);
-       vector<BasicBlockPtr> bbs;
-       bbs.push_back(createBasicBlock());
-       bbs.push_back(createBasicBlock());
-       bbs.push_back(createBasicBlock());
-//        bbs[0]->setBranchTerminator(BranchOpcode::JSLT,Register::REG_5,Register::REG_0,bbs[1].get(),bbs[2].get(),BitWidth::bit64);
-       bbs[0]->setBranchTerminator(BranchOpcode::JSLT, Register::REG_5, 0, bbs[1].get(), bbs[2].get(),
-                                   BitWidth::bit64);
+// TestCase generateProgram(size_t action_size, GeneratorType generator_type) {
+//    if (generator_type == ALU_ORIENTED) {
+//        auto *module = new Module(defaultReservedRegisters, 3, false);
+//        vector<BasicBlockPtr> bbs;
+//        bbs.push_back(createBasicBlock());
+//        bbs.push_back(createBasicBlock());
+//        bbs.push_back(createBasicBlock());
+// //        bbs[0]->setBranchTerminator(BranchOpcode::JSLT,Register::REG_5,Register::REG_0,bbs[1].get(),bbs[2].get(),BitWidth::bit64);
+//        bbs[0]->setBranchTerminator(BranchOpcode::JSLT, Register::REG_5, 0, bbs[1].get(), bbs[2].get(),
+//                                    BitWidth::bit64);
 
-//        bbs[0]->add(std::make_unique<LoadImm64Inst>(Register::REG_5, 2104983039));
-//        bbs[0]->add(std::make_unique<AluInst>(AluOpcode::SDIV,Register::REG_5, -505290271,BitWidth::bit32));
-       bbs[0]->add(std::make_unique<LoadImm64Inst>(Register::REG_5, 0x10000000c));
-       bbs[0]->add(std::make_unique<AluInst>(AluOpcode::SDIV, Register::REG_5, -4, BitWidth::bit32));
-       bbs[1]->setExitTerminator();
-       bbs[1]->add(std::make_unique<LoadImm64Inst>(Register::REG_0, 1));
-       bbs[2]->setExitTerminator();
-       module->addBasicBlocks(bbs);
-       BytecodeData bytecode = module->CodeGen();
-       std::stringstream stream;
-       stream << *module;
-       return {bytecode, stream.str()};
-   }
-   if (generator_type == UBPF_ORIENTED) {
-       return generateUBPFProgram(action_size);
-   }
+// //        bbs[0]->add(std::make_unique<LoadImm64Inst>(Register::REG_5, 2104983039));
+// //        bbs[0]->add(std::make_unique<AluInst>(AluOpcode::SDIV,Register::REG_5, -505290271,BitWidth::bit32));
+//        bbs[0]->add(std::make_unique<LoadImm64Inst>(Register::REG_5, 0x10000000c));
+//        bbs[0]->add(std::make_unique<AluInst>(AluOpcode::SDIV, Register::REG_5, -4, BitWidth::bit32));
+//        bbs[1]->setExitTerminator();
+//        bbs[1]->add(std::make_unique<LoadImm64Inst>(Register::REG_0, 1));
+//        bbs[2]->setExitTerminator();
+//        module->addBasicBlocks(bbs);
+//        BytecodeData bytecode = module->CodeGen();
+//        std::stringstream stream;
+//        stream << *module;
+//        return {bytecode, stream.str()};
+//    }
+//    if (generator_type == UBPF_ORIENTED) {
+//        return generateUBPFProgram(action_size);
+//    }
 
-   auto *module = new Module(defaultReservedRegisters, 3, false);
-   vector<BasicBlockPtr> bbs;
-   bbs.push_back(createBasicBlock());
-   bbs.push_back(createBasicBlock());
-   bbs[0]->setExitTerminator();
-   bbs[1]->setExitTerminator();
-   size_t block_index = 0;
-   while (action_size--) {
-       assert(block_index >= 0 && block_index < bbs.size());
-       auto block_cursor = bbs.at(block_index).get();
-       GeneratorAction next_action;
-       assert(generator_type == GENERIC);
-       next_action = getRandomGeneratorAction();
-       switch (next_action) {
-           case CREATE_ALU:
-               block_cursor->add(createRandomAluInstruction());
-               break;
-           case CREATE_MOV:
-               block_cursor->add(createRandomMovInstruction());
-               break;
-           case CREATE_LOAD:
-               block_cursor->add(createRandomLoadInstruction());
-               break;
-           case CREATE_LOAD_IMM:
-               block_cursor->add(createRandomLoadImm64Instruction());
-               break;
-           case CREATE_LOAD_PACKET:
-               block_cursor->add(createRandomLoadPacketInstruction());
-               break;
-           case CREATE_STORE:
-               block_cursor->add(createRandomStoreInstruction());
-               break;
-           case CREATE_CALL:
-               block_cursor->add(createRandomCallInstruction());
-               break;
-           case SET_BLOCK_JMP:
-               if (bbs.size() > 1 && block_index < bbs.size() - 1) {
-                   block_cursor->setBranchTerminator(createRandomBranchOpcode(),
-                                                     createRandomRegister(),
-                                                     createRandomVariable(),//createRandomRegister()
-                           // As we have difficulty handling specific next block address,
-                           // drop it as the next block
-                                                     bbs.at(block_index + 1).get(),
-                                                     bbs.at(random() % bbs.size()).get(),
-                           // disable createRandomBitWidth() since rbpf doesn't support jmp32
-                                                     BitWidth::bit64);
-               }
-               break;
-           case SET_BLOCK_EXIT:
-               block_cursor->setExitTerminator();
-               break;
-           case ADD_BLOCK:
-               bbs.push_back(createBasicBlock());
-               bbs[bbs.size() - 1]->setExitTerminator();
-               break;
-           case SWITCH_BLOCK_UP:
-               if (block_index > 0) {
-                   block_index--;
-               } else {
-                   block_index = bbs.size() - 1;
-               }
-               break;
-           case SWITCH_BLOCK_DOWN:
-               if (block_index < bbs.size() - 1) {
-                   block_index++;
-               } else {
-                   block_index = 0;
-               }
-               break;
-           case SWITCH_BLOCK_RANDOM:
-               block_index = random() % bbs.size();
-               break;
-       }
-   }
-   module->addBasicBlocks(bbs);
-   BytecodeData bytecode = module->CodeGen();
-   std::stringstream stream;
-   stream << *module;
-   return {bytecode, stream.str()};
-}
+//    auto *module = new Module(defaultReservedRegisters, 3, false);
+//    vector<BasicBlockPtr> bbs;
+//    bbs.push_back(createBasicBlock());
+//    bbs.push_back(createBasicBlock());
+//    bbs[0]->setExitTerminator();
+//    bbs[1]->setExitTerminator();
+//    size_t block_index = 0;
+//    while (action_size--) {
+//        assert(block_index >= 0 && block_index < bbs.size());
+//        auto block_cursor = bbs.at(block_index).get();
+//        GeneratorAction next_action;
+//        assert(generator_type == GENERIC);
+//        next_action = getRandomGeneratorAction();
+//        switch (next_action) {
+//            case CREATE_ALU:
+//                block_cursor->add(createRandomAluInstruction());
+//                break;
+//            case CREATE_MOV:
+//                block_cursor->add(createRandomMovInstruction());
+//                break;
+//            case CREATE_LOAD:
+//                block_cursor->add(createRandomLoadInstruction());
+//                break;
+//            case CREATE_LOAD_IMM:
+//                block_cursor->add(createRandomLoadImm64Instruction());
+//                break;
+//            case CREATE_LOAD_PACKET:
+//                block_cursor->add(createRandomLoadPacketInstruction());
+//                break;
+//            case CREATE_STORE:
+//                block_cursor->add(createRandomStoreInstruction());
+//                break;
+//            case CREATE_CALL:
+//                block_cursor->add(createRandomCallInstruction());
+//                break;
+//            case SET_BLOCK_JMP:
+//                if (bbs.size() > 1 && block_index < bbs.size() - 1) {
+//                    block_cursor->setBranchTerminator(createRandomBranchOpcode(),
+//                                                      createRandomRegister(),
+//                                                      createRandomVariable(),//createRandomRegister()
+//                            // As we have difficulty handling specific next block address,
+//                            // drop it as the next block
+//                                                      bbs.at(block_index + 1).get(),
+//                                                      bbs.at(random() % bbs.size()).get(),
+//                            // disable createRandomBitWidth() since rbpf doesn't support jmp32
+//                                                      BitWidth::bit64);
+//                }
+//                break;
+//            case SET_BLOCK_EXIT:
+//                block_cursor->setExitTerminator();
+//                break;
+//            case ADD_BLOCK:
+//                bbs.push_back(createBasicBlock());
+//                bbs[bbs.size() - 1]->setExitTerminator();
+//                break;
+//            case SWITCH_BLOCK_UP:
+//                if (block_index > 0) {
+//                    block_index--;
+//                } else {
+//                    block_index = bbs.size() - 1;
+//                }
+//                break;
+//            case SWITCH_BLOCK_DOWN:
+//                if (block_index < bbs.size() - 1) {
+//                    block_index++;
+//                } else {
+//                    block_index = 0;
+//                }
+//                break;
+//            case SWITCH_BLOCK_RANDOM:
+//                block_index = random() % bbs.size();
+//                break;
+//        }
+//    }
+//    module->addBasicBlocks(bbs);
+//    BytecodeData bytecode = module->CodeGen();
+//    std::stringstream stream;
+//    stream << *module;
+//    return {bytecode, stream.str()};
+// }
 
-TestCase generateKernelProgram(size_t action_size) {
-   // all possible instructions:
-   // (suppose 100 magic number)
-   //  alu: 14*( 4*9*8 + 100 * 9) = 16632
-   //  mov: 110 * 9 * 2 = 1980
-   //  load: 4 * 10 * 10 = 400
-   //  load_packet: 4 * 100 = 400
-   //  load_imm64: 9 * 100 = 900
-   //  load_map:
-   //  store: 9 * 9 * 100 * 4 = 32400
-   //  memx: 9 * 9 * 100 * 4 = 32400
-   //  call : program_size
-   //  exit
-   auto *module = new Module(defaultReservedRegisters, 3, false);
-   vector<BasicBlockPtr> bbs;
-   bbs.push_back(createBasicBlock());
-   bbs.push_back(createBasicBlock());
-   bbs[0]->setExitTerminator();
-   bbs[1]->setExitTerminator();
-   size_t block_index = 0;
-   while (action_size--) {
-       assert(block_index >= 0 && block_index < bbs.size());
-       auto block_cursor = bbs.at(block_index).get();
-       switch (getRandomKernelGeneratorAction()) {
-           case CREATE_ALU:
-               block_cursor->add(createRandomAluInstruction());
-               break;
-           case CREATE_MOV:
-               block_cursor->add(createRandomMovInstruction());
-               break;
-           case CREATE_LOAD:
-               block_cursor->add(createRandomLoadInstruction());
-               break;
-           case CREATE_LOAD_IMM:
-               block_cursor->add(createRandomLoadImm64Instruction());
-               break;
-           case CREATE_LOAD_PACKET:
-               block_cursor->add(createRandomLoadPacketInstruction());
-               break;
-           case CREATE_STORE:
-               block_cursor->add(createRandomStoreInstruction());
-               break;
-           case CREATE_CALL:
-               block_cursor->add(createRandomCallInstruction());
-               break;
-           case SET_BLOCK_JMP:
-               if (bbs.size() > 1 && block_index < bbs.size() - 1) {
-                   block_cursor->setBranchTerminator(createRandomBranchOpcode(),
-                                                     createRandomRegister(),
-                                                     createRandomVariable(),//createRandomRegister()
-                           // As we have difficulty handling specific next block address,
-                           // drop it as the next block
-                                                     bbs.at(block_index + 1).get(),
-                                                     bbs.at(random() % bbs.size()).get(),
-                           // disable createRandomBitWidth() since rbpf doesn't support jmp32
-                                                     BitWidth::bit64);
-               }
-               break;
-           case SET_BLOCK_EXIT:
-               block_cursor->setExitTerminator();
-               break;
-           case ADD_BLOCK:
-               bbs.push_back(createBasicBlock());
-               bbs[bbs.size() - 1]->setExitTerminator();
-               break;
-           case SWITCH_BLOCK_UP:
-               if (block_index > 0) {
-                   block_index--;
-               } else {
-                   block_index = bbs.size() - 1;
-               }
-               break;
-           case SWITCH_BLOCK_DOWN:
-               if (block_index < bbs.size() - 1) {
-                   block_index++;
-               } else {
-                   block_index = 0;
-               }
-               break;
-           case SWITCH_BLOCK_RANDOM:
-               block_index = random() % bbs.size();
-               break;
-       }
-   }
-   module->addBasicBlocks(bbs);
-   BytecodeData bytecode = module->CodeGen();
-   std::stringstream stream;
-   stream << *module;
-   return {bytecode, stream.str()};
-}
+// TestCase generateKernelProgram(size_t action_size) {
+//    // all possible instructions:
+//    // (suppose 100 magic number)
+//    //  alu: 14*( 4*9*8 + 100 * 9) = 16632
+//    //  mov: 110 * 9 * 2 = 1980
+//    //  load: 4 * 10 * 10 = 400
+//    //  load_packet: 4 * 100 = 400
+//    //  load_imm64: 9 * 100 = 900
+//    //  load_map:
+//    //  store: 9 * 9 * 100 * 4 = 32400
+//    //  memx: 9 * 9 * 100 * 4 = 32400
+//    //  call : program_size
+//    //  exit
+//    auto *module = new Module(defaultReservedRegisters, 3, false);
+//    vector<BasicBlockPtr> bbs;
+//    bbs.push_back(createBasicBlock());
+//    bbs.push_back(createBasicBlock());
+//    bbs[0]->setExitTerminator();
+//    bbs[1]->setExitTerminator();
+//    size_t block_index = 0;
+//    while (action_size--) {
+//        assert(block_index >= 0 && block_index < bbs.size());
+//        auto block_cursor = bbs.at(block_index).get();
+//        switch (getRandomKernelGeneratorAction()) {
+//            case CREATE_ALU:
+//                block_cursor->add(createRandomAluInstruction());
+//                break;
+//            case CREATE_MOV:
+//                block_cursor->add(createRandomMovInstruction());
+//                break;
+//            case CREATE_LOAD:
+//                block_cursor->add(createRandomLoadInstruction());
+//                break;
+//            case CREATE_LOAD_IMM:
+//                block_cursor->add(createRandomLoadImm64Instruction());
+//                break;
+//            case CREATE_LOAD_PACKET:
+//                block_cursor->add(createRandomLoadPacketInstruction());
+//                break;
+//            case CREATE_STORE:
+//                block_cursor->add(createRandomStoreInstruction());
+//                break;
+//            case CREATE_CALL:
+//                block_cursor->add(createRandomCallInstruction());
+//                break;
+//            case SET_BLOCK_JMP:
+//                if (bbs.size() > 1 && block_index < bbs.size() - 1) {
+//                    block_cursor->setBranchTerminator(createRandomBranchOpcode(),
+//                                                      createRandomRegister(),
+//                                                      createRandomVariable(),//createRandomRegister()
+//                            // As we have difficulty handling specific next block address,
+//                            // drop it as the next block
+//                                                      bbs.at(block_index + 1).get(),
+//                                                      bbs.at(random() % bbs.size()).get(),
+//                            // disable createRandomBitWidth() since rbpf doesn't support jmp32
+//                                                      BitWidth::bit64);
+//                }
+//                break;
+//            case SET_BLOCK_EXIT:
+//                block_cursor->setExitTerminator();
+//                break;
+//            case ADD_BLOCK:
+//                bbs.push_back(createBasicBlock());
+//                bbs[bbs.size() - 1]->setExitTerminator();
+//                break;
+//            case SWITCH_BLOCK_UP:
+//                if (block_index > 0) {
+//                    block_index--;
+//                } else {
+//                    block_index = bbs.size() - 1;
+//                }
+//                break;
+//            case SWITCH_BLOCK_DOWN:
+//                if (block_index < bbs.size() - 1) {
+//                    block_index++;
+//                } else {
+//                    block_index = 0;
+//                }
+//                break;
+//            case SWITCH_BLOCK_RANDOM:
+//                block_index = random() % bbs.size();
+//                break;
+//        }
+//    }
+//    module->addBasicBlocks(bbs);
+//    BytecodeData bytecode = module->CodeGen();
+//    std::stringstream stream;
+//    stream << *module;
+//    return {bytecode, stream.str()};
+// }
 
 TestCase ProgramGenerator::generatePoC(GeneratorType generator_type) {
     if (generator_type == GeneratorType::UBPF_OOB_POC) {
@@ -358,7 +357,7 @@ TestCase ProgramGenerator::generatePoC(GeneratorType generator_type) {
     assert(false);
 }
 
-ProgramGenerator::GeneratorAction ProgramGenerator::getRandomGeneratorAction() {
+GeneratorAction ProgramGenerator::getRandomGeneratorAction() {
     assert(action_randomizer_);
     return action_randomizer_->getRandomizedChoice();
 }

@@ -81,11 +81,9 @@ void generate_and_write_program(size_t program_number, size_t action_size, uniqu
 
     // ideal config: 20 actions of 10000 cases.
     vector<TestCase> testcases = {};
-//    while (program_number--) {
-//        testcases.push_back(program_generator->generateProgram(action_size));
-//    }
-//    testcases.push_back(program_generator->generatePoC(ProgramGenerator::GeneratorType::UBPF_OOB_POC));
-    testcases.push_back(program_generator->generatePoC(ProgramGenerator::GeneratorType::UBPF_INTEGER_OVERFLOW_ADDR_POC));
+   while (program_number--) {
+       testcases.push_back(program_generator->generateProgram(action_size));
+   }
     write_cases(testcases, base_binary_path, base_code_path);
 }
 
@@ -137,16 +135,16 @@ int main(int argc, char *argv[]) {
         assert(false && "Invalid mode found.");
     }
 
-    if (generation_strategy == "alu" || generation_strategy == "all") {
-        generate_and_write_alu_cases();
-    }
-    if (generation_strategy == "mem" || generation_strategy == "all") {
-        generate_and_write_mem_cases();
-    }
-    if (generation_strategy == "jmp" || generation_strategy == "all") {
-        generate_and_write_jmp_cases();
-    }
-    if (generation_strategy == "program" || generation_strategy == "all") {
-        generate_and_write_program(program_number, action_size, std::move(program_generator));
-    }
+    // if (generation_strategy == "alu" || generation_strategy == "all") {
+    //     generate_and_write_alu_cases();
+    // }
+    // if (generation_strategy == "mem" || generation_strategy == "all") {
+    //     generate_and_write_mem_cases();
+    // }
+    // if (generation_strategy == "jmp" || generation_strategy == "all") {
+    //     generate_and_write_jmp_cases();
+    // }
+    // if (generation_strategy == "program" || generation_strategy == "all") {
+    generate_and_write_program(program_number, action_size, std::move(program_generator));
+    // }
 }

@@ -11,6 +11,8 @@ if (USE_AFL)
 endif ()
 
 set(CMAKE_CXX_FLAGS_DEBUG  "${CMAKE_CXX_FLAGS_DEBUG} -g")
+set(CMAKE_C_FLAGS "${CMAKE_CXX_FLAGS} -lrt -lpthread -Wno-everything -std=c++17")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -lrt -lpthread -Wno-everything -std=c++17")
 
 include_directories(argparse)
 add_subdirectory(ir)
@@ -23,8 +25,6 @@ add_subdirectory(disassembler)
 # target_link_libraries(load_ir ir)
 
 
-set(CMAKE_C_FLAGS "${CMAKE_CXX_FLAGS} -lrt -lpthread -Wno-everything -std=gnu++17")
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -lrt -lpthread -Wno-everything -std=gnu++17")
 
 # add_executable(lkl_load lkl_load.c)
 # target_include_directories(lkl_load PRIVATE ir)

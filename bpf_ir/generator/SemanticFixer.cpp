@@ -6,6 +6,9 @@
 
 using namespace std;
 
+// #define ENABLE_ADVANCED_FIXER
+
+#ifdef ENABLE_ADVANCED_FIXER
 // Aggresive optimization
 void SemanticFixer::fixUninitializedMemory(ProgramGenerator *program_generator) {
     std::set<Variable> initialized_memory;
@@ -95,6 +98,7 @@ void SemanticFixer::fixDeadCode(ProgramGenerator *program_generator) {
         }
     }
 }
+#endif
 
 void SemanticFixer::fixUninitializedRegister(ProgramGenerator *program_generator) {
     // last stage since we assume all instructions are grammar-valid
@@ -141,6 +145,7 @@ void SemanticFixer::fixUninitializedRegister(ProgramGenerator *program_generator
     }
 }
 
+#ifdef ENABLE_ADVANCED_FIXER
 void SemanticFixer::fixUninitializedRegisterAggressively(ProgramGenerator *program_generator, bool is_aggressive) {
     set<Register> used_registers;
     for (auto &bb: bbs_) {
@@ -168,6 +173,8 @@ void SemanticFixer::fixUninitializedRegisterAggressively(ProgramGenerator *progr
 //        bb->insert(0, std::move(next_inst));
 //    }
 }
+
+#endif
 
 optional<Register> SemanticFixer::getInstWriteDstReg(Instruction *inst) {
     switch (inst->instType) {
@@ -213,7 +220,7 @@ optional<Register> SemanticFixer::getInstWriteDstReg(Instruction *inst) {
     }
 }
 
-
+#ifdef ENABLE_ADVANCED_FIXER
 void SemanticFixer::fixDivByZero() {
     for (auto& bb : bbs_) {
         for (auto it = bb->getInstructions().begin(); it != bb->getInstructions().end(); ++it) {
@@ -242,7 +249,7 @@ void SemanticFixer::fixOutOfBounds() {
     for (auto& bb : bbs_) {
         for (auto it = bb->getInstructions().begin(); it != bb->getInstructions().end(); ++it) {
             if ((*it)->instType == InstructionType::LoadInst || (*it)->instType == InstructionType::StoreInst) {
-                auto mem_inst = dynamic_cast<MemoryInst*>(it->get());
+                auto mem_inst = dynamic_cast<MemoryInst>(it->get());
                 // Insert a bounds check before the memory operation
                 auto check_inst = std::make_unique<BranchInst>(
                     BranchOpcode::JGT,
@@ -271,6 +278,7 @@ void SemanticFixer::fixOutOfBounds() {
         }
     }
 }
+#endif
 
 void SemanticFixer::fixBasicVerifierRules() {
     for (auto& bb : bbs_) {
