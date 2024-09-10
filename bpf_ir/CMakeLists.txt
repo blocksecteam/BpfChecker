@@ -18,18 +18,19 @@ add_subdirectory(mutator)
 add_subdirectory(generator)
 add_subdirectory(disassembler)
 
-add_executable(load_ir native_load.c)
-target_include_directories(load_ir PRIVATE ir)
-target_link_libraries(load_ir ir)
+# add_executable(load_ir native_load.c)
+# target_include_directories(load_ir PRIVATE ir)
+# target_link_libraries(load_ir ir)
 
 
-set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -lrt -lpthread")
+set(CMAKE_C_FLAGS "${CMAKE_CXX_FLAGS} -lrt -lpthread -Wno-everything -std=gnu++17")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -lrt -lpthread -Wno-everything -std=gnu++17")
 
-add_executable(lkl_load lkl_load.c)
-target_include_directories(lkl_load PRIVATE ir)
-target_include_directories(lkl_load PRIVATE /path/to/lkl/tools/lkl/include)
-target_link_libraries(lkl_load ir rt)
-target_link_libraries(lkl_load /path/to/lkl/tools/lkl/lib/liblkl.so)
+# add_executable(lkl_load lkl_load.c)
+# target_include_directories(lkl_load PRIVATE ir)
+# target_include_directories(lkl_load PRIVATE /path/to/lkl/tools/lkl/include)
+# target_link_libraries(lkl_load ir rt)
+# target_link_libraries(lkl_load /path/to/lkl/tools/lkl/lib/liblkl.so)
 
 
-add_subdirectory(fuzzer)
+# add_subdirectory(experimental_fuzzer)

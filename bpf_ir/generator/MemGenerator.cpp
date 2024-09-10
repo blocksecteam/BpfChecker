@@ -1,13 +1,7 @@
 #include <sstream>
 #include "MemGenerator.h"
+#include "ProgramGenerator.h"
 
-const size_t MM_PROGRAM_START64 = 0x100000000;
-/// Start of the stack in the memory map
-const size_t MM_STACK_START = 0x200000000;
-/// Start of the heap in the memory map
-const size_t MM_HEAP_START = 0x300000000;
-/// Start of the input buffers in the memory map
-const size_t MM_INPUT_START = 0x400000000;
 
 TestCase generate_random_mem_load() {
     Module module(defaultReservedRegisters, 3);
@@ -71,7 +65,7 @@ TestCase generate_mem_write() {
     return {bytecode, stream.str()};
 }
 
-std::vector<TestCase> generate_random_mem_programs(int num_operations = 5) {
+std::vector<TestCase> generate_random_mem_programs(int num_operations) {
     std::vector<TestCase> test_cases;
     
     for (int i = 0; i < num_operations; ++i) {

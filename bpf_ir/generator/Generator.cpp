@@ -60,7 +60,7 @@ void generate_and_write_alu_cases() {
 void generate_and_write_mem_cases() {
     string base_binary_path = base_path + "mem_set/";
     string base_code_path = base_path + "mem_code/";
-    vector<TestCase> testcases = generate_simple_mem_set();
+    vector<TestCase> testcases = generate_random_mem_programs();
     write_cases(testcases, base_binary_path, base_code_path);
 }
 
@@ -71,8 +71,7 @@ void generate_and_write_jmp_cases() {
     write_cases(testcases, base_binary_path, base_code_path);
 }
 
-void
-generate_and_write_program(size_t program_number, size_t action_size, unique_ptr<ProgramGenerator> program_generator) {
+void generate_and_write_program(size_t program_number, size_t action_size, unique_ptr<ProgramGenerator> program_generator) {
     fs::path base_output_path = base_path;
     auto base_binary_path = base_output_path / "program_set/";
     string base_code_path = base_output_path / "program_code/";
@@ -89,16 +88,6 @@ generate_and_write_program(size_t program_number, size_t action_size, unique_ptr
     testcases.push_back(program_generator->generatePoC(ProgramGenerator::GeneratorType::UBPF_INTEGER_OVERFLOW_ADDR_POC));
     write_cases(testcases, base_binary_path, base_code_path);
 }
-
-void generate_and_write_mem_poc() {
-//    TestCase generate_mem_poc()
-    string base_binary_path = base_path + "poc_set/";
-    string base_code_path = base_path + "poc_code/";
-
-    vector<TestCase> testcases = {generate_mem_poc()};
-    write_cases(testcases, base_binary_path, base_code_path);
-}
-
 
 int main(int argc, char *argv[]) {
     argparse::ArgumentParser program("Bpf Program Generator", "1.1.0");
@@ -137,6 +126,7 @@ int main(int argc, char *argv[]) {
     size_t program_number = program.get<int>("--number");
     size_t action_size = program.get<int>("--action_size");
     string generation_target = program.get<std::string>("--generation_target");
+    string generation_strategy = program.get<std::string>("--generation_strategy");
 
     unique_ptr<ProgramGenerator> program_generator = nullptr;
     if (generation_target == "rbpf") {

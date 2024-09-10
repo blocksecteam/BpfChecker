@@ -248,7 +248,7 @@ void SemanticFixer::fixOutOfBounds() {
                     BranchOpcode::JGT,
                     mem_inst->getSrc(),
                     Variable(MM_INPUT_START + 65536), // Assuming 64KB input buffer
-                    bb->getNextBlock(),
+                    (std::next(it) != bb->getInstructions().end()) ? std::next(it)->get() : nullptr,
                     bb.get(),
                     BitWidth::bit64
                 );

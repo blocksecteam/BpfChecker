@@ -6,6 +6,30 @@
 #include <vector>
 #include <optional>
 
+const size_t MM_PROGRAM_START64 = 0x100000000;
+/// Start of the stack in the memory map
+const size_t MM_STACK_START = 0x200000000;
+/// Start of the heap in the memory map
+const size_t MM_HEAP_START = 0x300000000;
+/// Start of the input buffers in the memory map
+const size_t MM_INPUT_START = 0x400000000;
+
+enum GeneratorAction {
+    CREATE_ALU,
+    CREATE_MOV,
+    CREATE_LOAD,
+    CREATE_LOAD_IMM,
+    CREATE_LOAD_PACKET,
+    CREATE_STORE,
+    CREATE_CALL,
+    SET_BLOCK_JMP,
+    SET_BLOCK_EXIT,
+    ADD_BLOCK,
+    SWITCH_BLOCK_UP,
+    SWITCH_BLOCK_DOWN,
+    SWITCH_BLOCK_RANDOM,
+};
+
 class ProgramGenerator {
 
 public:
@@ -26,21 +50,7 @@ public:
     generateWriteUsageInstruction(Register writtenRegister, Registers &initializedRegisters);
 
 protected:
-    enum GeneratorAction {
-        CREATE_ALU,
-        CREATE_MOV,
-        CREATE_LOAD,
-        CREATE_LOAD_IMM,
-        CREATE_LOAD_PACKET,
-        CREATE_STORE,
-        CREATE_CALL,
-        SET_BLOCK_JMP,
-        SET_BLOCK_EXIT,
-        ADD_BLOCK,
-        SWITCH_BLOCK_UP,
-        SWITCH_BLOCK_DOWN,
-        SWITCH_BLOCK_RANDOM,
-    };
+
 
     GeneratorAction getRandomGeneratorAction();
 
