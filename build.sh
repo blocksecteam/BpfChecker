@@ -1,0 +1,1 @@
+cmake -B build bpf_ir -GNinja && ninja -C build generator
