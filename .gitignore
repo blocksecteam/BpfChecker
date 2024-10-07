@@ -2,3 +2,4 @@
 build
 bpf_ir/build
 output
+.DS_Store

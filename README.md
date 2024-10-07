@@ -12,8 +12,9 @@ Toss a Fault to BpfChecker: Revealing Implementation Flaws for eBPF runtimes wit
 
 The following toolchains are required to be installed in advanced:
 
-- clang
-- rust toolchain
+- Clang
+- Rust Toolchain
+- Ninja, Cmake
 
 ### Usage
 
