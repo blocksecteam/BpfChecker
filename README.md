@@ -18,15 +18,9 @@ The following toolchains are required to be installed in advanced:
 - Rust Toolchain
 - Ninja, Cmake
 
-## Usage
-
-See README in `bpf_ir` for details about how to generate IR eBPF program, and how to mutate, fix the IR program.
-
-For differential fuzzing of the `rbpf` and Windows eBPF, please see `rbpf_runner` for detail.
-
 ### Demo Usage
 
-> Note that the script is aimed at running on the Ubuntu host.
+> Note that the script is aimed at running on the Ubuntu host. This demo performs the differential fuzzing between the JIT and interpreter mode of the Solana rBPF.
 
 To build the IR generator and the runner, run `build.sh`.
 
