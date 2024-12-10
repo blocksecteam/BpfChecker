@@ -2,6 +2,8 @@
 
 This is the repository for paper "Toss a Fault to BpfChecker: Revealing Implementation Flaws for eBPF runtimes with Differential Fuzzing" accepted to CCS 2024.
 
+Check out our paper at [Toss a Fault to BpfChecker](https://dl.acm.org/doi/10.1145/3658644.3690237).
+
 # Tools
 
 ## Module Structure
@@ -41,16 +43,23 @@ Details of the found bugs and the fix commits are listed in https://gist.github.
 
 # Citation
 
-If you use the related tools or the insights we observed in our paper. Please considering cite our paper.
+If you use the related tools or the insights we observed in our paper, please considering cite our paper.
 
 ```
 @inproceedings{10.1145/3658644.3690237,
-author = {Chaoyuan, Peng and Jiang, Muhui and Lei, Wu and Zhou, Yajin},
+author = {Peng, Chaoyuan and Jiang, Muhui and Wu, Lei and Zhou, Yajin},
 title = {Toss a Fault to BpfChecker: Revealing Implementation Flaws for eBPF runtimes with Differential Fuzzing},
 year = {2024},
 isbn = {9798400706363},
+publisher = {Association for Computing Machinery},
+address = {New York, NY, USA},
 url = {https://doi.org/10.1145/3658644.3690237},
 doi = {10.1145/3658644.3690237},
-keywords = {Differential Fuzzing, eBPF, Software Security},
+booktitle = {Proceedings of the 2024 on ACM SIGSAC Conference on Computer and Communications Security},
+pages = {3928–3942},
+numpages = {15},
+keywords = {EBPF, differential fuzzing, software security},
+location = {Salt Lake City, UT, USA},
+series = {CCS '24}
 }
 ```
